@@ -1,0 +1,16 @@
+version: "3"
+
+services:
+  reverse-proxy:
+    image: nginx:latest
+    ports:
+      - "80:80"
+    volumes:
+       - "./reverse-proxy-config:/etc/nginx/conf.d"
+       - "./secrets/reverse-proxy:/secrets"
+       - "./repositories:/repositories"
+       - "./assets:/assets"
+  
+  personal-website:
+    build: ./repositories/personal-website.git/
+
