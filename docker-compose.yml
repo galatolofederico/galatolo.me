@@ -11,9 +11,14 @@ services:
        - "./repositories:/repositories"
        - "./assets:/assets"
        - "cv_dist:/cv_dist"
+    networks:
+      - external
+      - personal-website
   
   personal-website:
     build: ./repositories/personal-website.git/
+    networks:
+      - personal-website
 
   cv:
     build: ./repositories/cv.git/
@@ -23,7 +28,18 @@ services:
       - "cv_dist:/dist"
     environment:
       - MEJSON=/repositories/me.json.git/me.json
-      - SIGNATURE_FILE=/secrets/cv/signature.png
+      - SIGNATURE_FILE=/secrets/signature.png
+    networks:
+      - cv
+
+
+networks:
+  external:
+    internal: false
+  personal-website:
+    internal: true
+  cv:
+    internal: true
 
 volumes:
   cv_dist:
