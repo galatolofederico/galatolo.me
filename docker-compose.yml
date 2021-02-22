@@ -10,7 +10,20 @@ services:
        - "./secrets/reverse-proxy:/secrets"
        - "./repositories:/repositories"
        - "./assets:/assets"
+       - "cv_dist:/cv_dist"
   
   personal-website:
     build: ./repositories/personal-website.git/
 
+  cv:
+    build: ./repositories/cv.git/
+    volumes:
+      - "./repositories:/repositories"
+      - "./secrets/cv:/secrets"
+      - "cv_dist:/dist"
+    environment:
+      - MEJSON=/repositories/me.json.git/me.json
+      - SIGNATURE_FILE=/secrets/cv/signature.png
+
+volumes:
+  cv_dist:
