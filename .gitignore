@@ -1,3 +1,5 @@
 /repositories
 secrets/*
 !secrets/.gitkeep
+
+/.vscode
