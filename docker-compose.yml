@@ -5,15 +5,20 @@ services:
     image: nginx:latest
     ports:
       - "80:80"
+      - "443:443"
     volumes:
-       - "./reverse-proxy-config:/etc/nginx/conf.d"
-       - "./secrets/reverse-proxy:/secrets"
-       - "./repositories:/repositories"
-       - "./assets:/assets"
-       - "cv_dist:/cv_dist"
+      #- "./reverse-proxy-config/init-letsencrypt:/etc/nginx/conf.d"
+      - "./reverse-proxy-config/live:/etc/nginx/conf.d"
+      - "./secrets/reverse-proxy:/secrets"
+      - "./repositories:/repositories"
+      - "./assets:/assets"
+      - "cv_dist:/cv_dist"
+      - ./data/certbot/conf:/certbot/conf
+      - ./data/certbot/html:/certbot/html
     networks:
       - external
       - personal-website
+      - certbot
     restart: always
   
   personal-website:
@@ -35,6 +40,14 @@ services:
       - cv
     restart: always
 
+  certbot:
+    image: certbot/certbot
+    volumes:
+      - ./data/certbot/conf:/etc/letsencrypt
+      - ./data/certbot/html:/var/www/certbot
+    networks:
+      - external
+      - certbot
 
 networks:
   external:
@@ -42,6 +55,8 @@ networks:
   personal-website:
     internal: true
   cv:
+    internal: true
+  certbot:
     internal: true
 
 volumes:
