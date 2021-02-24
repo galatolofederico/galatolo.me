@@ -45,6 +45,7 @@ services:
     volumes:
       - ./data/certbot/conf:/etc/letsencrypt
       - ./data/certbot/html:/var/www/certbot
+    entrypoint: "/bin/sh -c 'trap exit TERM; while :; do sleep 12h; certbot renew; done;'"
     networks:
       - external
       - certbot
