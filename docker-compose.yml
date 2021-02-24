@@ -14,11 +14,13 @@ services:
     networks:
       - external
       - personal-website
+    restart: always
   
   personal-website:
     build: ./repositories/personal-website.git/
     networks:
       - personal-website
+    restart: always
 
   cv:
     build: ./repositories/cv.git/
@@ -31,6 +33,7 @@ services:
       - SIGNATURE_FILE=/secrets/signature.png
     networks:
       - cv
+    restart: always
 
 
 networks:
