@@ -5,6 +5,8 @@ if [ "$#" -ne 1 ]; then
     exit
 fi
 
+cd "$(dirname "$0")"
+
 url="$1"
 name=$(echo "$url" | rev | cut -d'/' -f1 | rev )
 
