@@ -25,6 +25,7 @@ services:
     build: ./repositories/personal-website.git/
     networks:
       - personal-website
+      - external
     restart: always
 
   cv:
