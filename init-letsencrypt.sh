@@ -5,7 +5,7 @@ if ! [ -x "$(command -v docker-compose)" ]; then
   exit 1
 fi
 
-domains=(galatolo.me static.galatolo.me pubs.galatolo.me git.galatolo.me api.galatolo.me)
+domains=(galatolo.me static.galatolo.me pubs.galatolo.me git.galatolo.me api.galatolo.me cloud.galatolo.me)
 rsa_key_size=4096
 data_path="./data/certbot"
 email="galatolo.federico@gmail.com"
