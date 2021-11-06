@@ -4,16 +4,16 @@ services:
   reverse-proxy:
     image: nginx:latest
     ports:
-      - "80:80"
-      - "443:443"
+      - 80:80
+      - 443:443
     volumes:
-      #- "./reverse-proxy-config/init-letsencrypt:/etc/nginx/conf.d"
-      - "./reverse-proxy-config/live:/etc/nginx/conf.d"
-      - "./secrets/reverse-proxy:/secrets"
-      - "./repositories:/repositories"
-      - "./assets:/assets"
-      - "./pubs:/pubs"
-      - "cv_dist:/cv_dist"
+      #- reverse-proxy-config/init-letsencrypt:/etc/nginx/conf.d
+      - reverse-proxy-config/live:/etc/nginx/conf.d
+      - secrets/reverse-proxy:/secrets
+      - repositories:/repositories
+      - assets:/assets
+      - pubs:/pubs
+      - cv_dist:/cv_dist
       - ./data/certbot/conf:/certbot/conf
       - ./data/certbot/html:/certbot/html
     networks:
@@ -32,9 +32,9 @@ services:
   cv:
     build: ./repositories/cv.git/
     volumes:
-      - "./repositories:/repositories"
-      - "./secrets/cv:/secrets"
-      - "cv_dist:/dist"
+      - repositories:/repositories
+      - secrets/cv:/secrets
+      - cv_dist:/dist
     environment:
       - MEJSON=/repositories/me.json.git/me.json
       - SIGNATURE_FILE=/secrets/signature.png
