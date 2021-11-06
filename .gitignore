@@ -8,3 +8,5 @@ pubs/*
 !pubs/.gitkeep
 
 /.vscode
+
+/.env
