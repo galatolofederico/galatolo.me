@@ -12,6 +12,7 @@ services:
       - "./secrets/reverse-proxy:/secrets"
       - "./repositories:/repositories"
       - "./assets:/assets"
+      - "./pubs:/pubs"
       - "cv_dist:/cv_dist"
       - ./data/certbot/conf:/certbot/conf
       - ./data/certbot/html:/certbot/html
