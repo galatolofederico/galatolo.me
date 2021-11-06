@@ -3,4 +3,8 @@ secrets/*
 !secrets/.gitkeep
 /data
 
+
+pubs/*
+!pubs/.gitkeep
+
 /.vscode
