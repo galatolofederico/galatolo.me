@@ -8,11 +8,11 @@ services:
       - 443:443
     volumes:
       #- reverse-proxy-config/init-letsencrypt:/etc/nginx/conf.d
-      - reverse-proxy-config/live:/etc/nginx/conf.d
-      - secrets/reverse-proxy:/secrets
-      - repositories:/repositories
-      - assets:/assets
-      - pubs:/pubs
+      - ./reverse-proxy-config/live:/etc/nginx/conf.d
+      - ./secrets/reverse-proxy:/secrets
+      - ./repositories:/repositories
+      - ./assets:/assets
+      - ./pubs:/pubs
       - cv_dist:/cv_dist
       - ./data/certbot/conf:/certbot/conf
       - ./data/certbot/html:/certbot/html
@@ -32,8 +32,8 @@ services:
   cv:
     build: ./repositories/cv.git/
     volumes:
-      - repositories:/repositories
-      - secrets/cv:/secrets
+      - ./repositories:/repositories
+      - ./secrets/cv:/secrets
       - cv_dist:/dist
     environment:
       - MEJSON=/repositories/me.json.git/me.json
@@ -52,6 +52,46 @@ services:
       - external
       - certbot
 
+  nextcloud-db:
+    image: mariadb
+    restart: always
+    command: --transaction-isolation=READ-COMMITTED --binlog-format=ROW
+    volumes:
+      - ./nextcloud/db:/var/lib/mysql
+    environment:
+      - MYSQL_ROOT_PASSWORD=${MYSQL_ROOT_PASSWORD}
+      - MYSQL_PASSWORD=${MYSQL_PASSWORD}
+      - MYSQL_DATABASE=${MYSQL_DATABASE}
+      - MYSQL_USER=${MYSQL_USER}
+    networks:
+      - nextcloud
+    command: --innodb-read-only-compressed=OFF
+    
+  nextcloud-app:
+    image: nextcloud
+    restart: always
+    networks:
+      - nextcloud
+      - external
+    volumes:
+      - ./nextcloud/html:/var/www/html
+    environment:
+      - MYSQL_PASSWORD=${MYSQL_PASSWORD}
+      - MYSQL_DATABASE=${MYSQL_DATABASE}
+      - MYSQL_USER=${MYSQL_USER}
+      - MYSQL_HOST=nextcloud-db
+
+      - OBJECTSTORE_SWIFT_URL=${OBJECTSTORE_SWIFT_URL}
+      - OBJECTSTORE_SWIFT_AUTOCREATE=${OBJECTSTORE_SWIFT_AUTOCREATE}
+
+      - OBJECTSTORE_SWIFT_USER_NAME=${OBJECTSTORE_SWIFT_USER_NAME}
+      - OBJECTSTORE_SWIFT_USER_PASSWORD=${OBJECTSTORE_SWIFT_USER_PASSWORD}
+
+      - OBJECTSTORE_SWIFT_PROJECT_NAME=${OBJECTSTORE_SWIFT_PROJECT_NAME}
+      - OBJECTSTORE_SWIFT_SERVICE_NAME=${OBJECTSTORE_SWIFT_SERVICE_NAME}
+      - OBJECTSTORE_SWIFT_CONTAINER_NAME=${OBJECTSTORE_SWIFT_CONTAINER_NAME}
+      - OBJECTSTORE_SWIFT_REGION=${OBJECTSTORE_SWIFT_REGION}
+
 networks:
   external:
     internal: false
@@ -60,6 +100,8 @@ networks:
   cv:
     internal: true
   certbot:
+    internal: true
+  nextcloud:
     internal: true
 
 volumes:
