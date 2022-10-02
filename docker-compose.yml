@@ -23,7 +23,7 @@ services:
     restart: always
   
   personal-website:
-    build: ./repositories/personal-website.git/
+    build: ./repositories/personal-website-next.git/
     networks:
       - personal-website
       - external
